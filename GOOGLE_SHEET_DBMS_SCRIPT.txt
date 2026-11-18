@@ -1,0 +1,43 @@
+// =========================================================================
+// GOOGLE SHEET PERMANENT DBMS SCRIPT (100% FREE FOREVER)
+// Steps:
+// 1. Google Drive me ek nayi Google Sheet banayein ("New National Bhiwadi DB").
+// 2. Upar menu me: Extensions -> Apps Script par click karein.
+// 3. Pura purana code delete karke ye code paste karein aur Save karein.
+// 4. Upar blue button "Deploy" -> "New deployment" par click karein.
+// 5. Type me "Web app" chunein -> Who has access: "Anyone" select karein -> Deploy!
+// 6. Jo Web App URL mile, use website ke Admin Panel (Ctrl+Shift+A) ->
+//    "Google Sheet & Cloud DBMS" tab me paste karke Save kar dein.
+// =========================================================================
+
+function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("AppState") || ss.insertSheet("AppState");
+  var raw = sheet.getRange("A1").getValue();
+  return ContentService.createTextOutput(raw || "{}")
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var payload = JSON.parse(e.postData.contents);
+
+  // 1. Save full live state (Settings, Courses, Photos, Videos, Reviews)
+  var stateSheet = ss.getSheetByName("AppState") || ss.insertSheet("AppState");
+  if (payload.state) {
+    stateSheet.getRange("A1").setValue(JSON.stringify(payload.state));
+  }
+
+  // 2. Append every new student booking into a clean readable "Bookings" tab
+  if (payload.booking) {
+    var bkSheet = ss.getSheetByName("Bookings") || ss.insertSheet("Bookings");
+    if (bkSheet.getLastRow() === 0) {
+      bkSheet.appendRow(["Booking ID", "Date", "Student Name", "Mobile", "Course", "Car", "Batch Time", "Bhiwadi Area"]);
+    }
+    var b = payload.booking;
+    bkSheet.appendRow([b.id, b.date, b.name, b.phone, b.course, b.car, b.time, b.area]);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ status: "OK" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}

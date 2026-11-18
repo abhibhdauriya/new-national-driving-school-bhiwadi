@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://new-national-driving-school-bhiwadi.vercel.app/sitemap.xml
