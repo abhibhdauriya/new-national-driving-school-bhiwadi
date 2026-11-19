@@ -1,0 +1,46 @@
+// =========================================================================
+// FIXED GOOGLE SHEET PERMANENT DBMS SCRIPT (100% WORKING WITH text/plain)
+// Steps:
+// 1. Google Drive me ek nayi Google Sheet banayein ("New National Bhiwadi DB").
+// 2. Upar menu me: Extensions -> Apps Script par click karein.
+// 3. Pura purana code delete karke ye code paste karein aur Save (Ctrl+S) karein.
+// 4. Upar blue button "Deploy" -> "New deployment" par click karein.
+// 5. Type me "Web app" chunein:
+//    - Execute as: Me
+//    - Who has access: Anyone  <-- (ZARURI HAI!)
+// 6. Deploy dabayein -> "Authorize access" -> Advanced -> Go to ... -> Allow.
+// 7. Jo /exec URL mile, use Admin Panel -> "Turso DB & Google Sheet" tab me paste karein.
+// =========================================================================
+
+function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName("AppState") || ss.insertSheet("AppState");
+  var raw = sheet.getRange("A1").getValue();
+  return ContentService.createTextOutput(raw || "{}")
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var rawData = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
+  var payload = JSON.parse(rawData);
+
+  // 1. Save full live state
+  var stateSheet = ss.getSheetByName("AppState") || ss.insertSheet("AppState");
+  if (payload.state) {
+    stateSheet.getRange("A1").setValue(JSON.stringify(payload.state));
+  }
+
+  // 2. Append new booking row into "Bookings" tab
+  if (payload.booking) {
+    var bkSheet = ss.getSheetByName("Bookings") || ss.insertSheet("Bookings");
+    if (bkSheet.getLastRow() === 0) {
+      bkSheet.appendRow(["Booking ID", "Date", "Student Name", "Mobile", "Course", "Car", "Batch Time", "Bhiwadi Area"]);
+    }
+    var b = payload.booking;
+    bkSheet.appendRow([b.id, b.date, b.name, b.phone, b.course, b.car, b.time, b.area]);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({ status: "OK" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
