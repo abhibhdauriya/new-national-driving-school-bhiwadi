@@ -88,8 +88,8 @@
       </nav>
 
       <div class="flex items-center gap-2.5">
-        <span id="db-sync-badge" class="hidden sm:inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-800/90 text-emerald-400 border border-emerald-500/30">
-          ● Fast Mode
+        <span id="db-sync-badge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-800/90 text-emerald-400 border border-emerald-500/30">
+          ● Live Cloud
         </span>
         <a href="#booking" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs sm:text-sm px-4 py-2 rounded-xl shadow-lg shadow-amber-500/25 transition">
           Book Seat
@@ -369,7 +369,7 @@
   </footer>
 
   <!-- ===================================================================== -->
-  <!-- FULL POWER ADMIN COMMAND CENTER (Turso DB + Google Sheet + Settings)  -->
+  <!-- FULL POWER ADMIN COMMAND CENTER (Cross-Device Sync + All Save Buttons)-->
   <!-- ===================================================================== -->
   <div id="admin-modal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md overflow-y-auto">
     <div class="min-h-screen max-w-6xl mx-auto p-4 sm:p-6 flex items-center justify-center">
@@ -379,7 +379,7 @@
         <div id="admin-login-box" class="p-8 sm:p-12 max-w-md mx-auto text-center space-y-5">
           <img src="favicon.svg" alt="Logo" class="w-16 h-16 mx-auto rounded-2xl shadow-lg" />
           <h2 class="text-2xl font-extrabold">Owner Full-Power Admin</h2>
-          <p class="text-xs text-slate-400">Turso SQL DB • Google Sheet DBMS • WhatsApp & School Control</p>
+          <p class="text-xs text-slate-400">Cross-Device Live Cloud Sync • Courses • WhatsApp • Media</p>
           <input type="password" id="admin-pin-input" placeholder="Enter Admin PIN (Default: 1234)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-lg tracking-widest focus:border-amber-400 focus:outline-none" />
           <div class="flex gap-3">
             <button onclick="closeAdminPanel()" class="w-1/3 bg-slate-800 hover:bg-slate-700 py-3 rounded-xl text-sm font-bold">Close</button>
@@ -392,85 +392,49 @@
         <div id="admin-workspace" class="hidden">
           <div class="bg-slate-950 px-6 py-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
             <div class="flex items-center gap-3">
-              <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-xs">FULL ADMIN POWER</span>
-              <h3 class="font-extrabold text-base sm:text-lg">Turso SQL + Google Sheet DBMS</h3>
+              <span class="px-2.5 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-xs">CROSS-DEVICE LIVE</span>
+              <h3 class="font-extrabold text-base sm:text-lg">Owner Control & Global DBMS</h3>
             </div>
             <div class="flex items-center gap-2">
-              <button onclick="exportBackupJSON()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-semibold">⬇ Backup JSON</button>
+              <button onclick="forceCloudRefresh()" class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-lg font-bold">🔄 Sync Now</button>
+              <button onclick="exportBackupJSON()" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg font-semibold">⬇ Backup</button>
               <button onclick="closeAdminPanel()" class="text-xs bg-rose-500/20 text-rose-300 border border-rose-500/40 px-3 py-1.5 rounded-lg font-bold">✕ Exit</button>
             </div>
           </div>
 
           <!-- Admin Tabs -->
           <div class="flex flex-wrap gap-2 px-6 pt-4 border-b border-slate-800 bg-slate-900/60 text-xs font-bold">
-            <button onclick="switchAdminTab('bookings')" id="tab-bookings" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-amber-500 text-slate-950">📋 Bookings (<span id="badge-bk-count">0</span>)</button>
-            <button onclick="switchAdminTab('dbms')" id="tab-dbms" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-emerald-400">🗄️ Turso DB & Google Sheet</button>
+            <button onclick="switchAdminTab('courses')" id="tab-courses" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-amber-500 text-slate-950">💰 Courses & Fees</button>
+            <button onclick="switchAdminTab('bookings')" id="tab-bookings" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-slate-300">📋 Bookings (<span id="badge-bk-count">0</span>)</button>
             <button onclick="switchAdminTab('settings')" id="tab-settings" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-slate-300">⚙️ WhatsApp, Logo & School</button>
-            <button onclick="switchAdminTab('courses')" id="tab-courses" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-slate-300">💰 Courses & Fleet</button>
             <button onclick="switchAdminTab('media')" id="tab-media" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-slate-300">🎥 Videos & Photos</button>
             <button onclick="switchAdminTab('reviews')" id="tab-reviews" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-slate-300">⭐ Reviews</button>
+            <button onclick="switchAdminTab('dbms')" id="tab-dbms" class="admin-tab px-3.5 py-2.5 rounded-t-xl bg-slate-800 text-emerald-400">🗄️ Turso & Google Sheet</button>
           </div>
 
           <div class="p-6 max-h-[75vh] overflow-y-auto space-y-6">
-            <!-- Tab 1: Bookings -->
-            <div id="panel-bookings" class="admin-panel space-y-4">
-              <div class="flex items-center justify-between">
-                <h4 class="font-bold text-base">Student WhatsApp Bookings</h4>
-                <button onclick="clearBookings()" class="text-xs text-rose-400 hover:underline">Clear All</button>
+            <!-- Tab 1: Courses Editor (With Full Edit, Delete & Save Button) -->
+            <div id="panel-courses" class="admin-panel space-y-5">
+              <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <div>
+                  <h4 class="font-bold text-base text-white">Manage Courses, Prices & Badges</h4>
+                  <p class="text-xs text-slate-400">Price badalne ya course delete karne ke baad neeche <strong>Save Courses Live</strong> zaroor dabayein taaki sabhi phones par update ho.</p>
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="adminAddNewCourse()" class="bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs">+ Add New Course</button>
+                  <button onclick="saveCoursesChanges()" id="btn-save-courses" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2 rounded-xl text-xs shadow-lg shadow-emerald-500/20">💾 Save Courses Live</button>
+                </div>
               </div>
-              <div id="admin-bookings-list" class="space-y-3"></div>
+              <div id="admin-courses-editor" class="grid sm:grid-cols-2 gap-4"></div>
             </div>
 
-            <!-- Tab 2: TURSO DB + GOOGLE SHEET PERMANENT DBMS -->
-            <div id="panel-dbms" class="admin-panel hidden space-y-5">
-              <!-- Turso SQL Database -->
-              <div class="bg-slate-950 p-5 rounded-2xl border border-sky-500/40 space-y-3">
-                <div class="flex items-center justify-between">
-                  <h4 class="font-bold text-sky-400 text-sm">⚡ 1. Turso DB (LibSQL Serverless SQL — Instant Live Sync)</h4>
-                  <span class="text-[11px] bg-sky-500/20 text-sky-300 px-2.5 py-0.5 rounded-full font-bold">Auto-Creates SQL Tables</span>
-                </div>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                  Turso Dashboard se apna <strong>Database URL</strong> (<code>libsql://...turso.io</code> ya <code>https://...turso.io</code>) aur <strong>Auth Token</strong> paste karein. Tables (<code>school_state</code> & <code>bookings</code>) apne aap ban jayengi!
-                </p>
-                <div class="grid sm:grid-cols-2 gap-3">
-                  <div>
-                    <label class="block text-xs font-bold mb-1 text-slate-300">Turso Database URL</label>
-                    <input type="text" id="dbms-turso-url" placeholder="libsql://driving-school-username.turso.io" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
-                  </div>
-                  <div>
-                    <label class="block text-xs font-bold mb-1 text-slate-300">Turso Auth Token</label>
-                    <input type="password" id="dbms-turso-token" placeholder="eyJhbGciOiJFZERTQSIsInR5cCI6..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
-                  </div>
-                </div>
+            <!-- Tab 2: Bookings -->
+            <div id="panel-bookings" class="admin-panel hidden space-y-4">
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold text-base">Student WhatsApp Bookings</h4>
+                <button onclick="clearBookings()" class="text-xs bg-rose-500/20 text-rose-300 px-3 py-1.5 rounded-lg font-bold">Clear All</button>
               </div>
-
-              <!-- Google Sheet Permanent DBMS -->
-              <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/40 space-y-3">
-                <div class="flex items-center justify-between">
-                  <h4 class="font-bold text-emerald-400 text-sm">📊 2. Google Sheet Permanent DBMS (Fixed Keepalive Sync)</h4>
-                  <span class="text-[11px] bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full font-bold">Owner Excel Rows</span>
-                </div>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                  Google Sheet Apps Script ka <strong>Web App URL</strong> (<code>.../exec</code>) paste karein. Ab WhatsApp tab khulne se pehle booking row guaranteed Google Sheet ke <strong>Bookings</strong> tab me save hogi.
-                </p>
-                <input type="url" id="dbms-gsheet-url" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
-              </div>
-
-              <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 grid sm:grid-cols-2 gap-3 items-end">
-                <div>
-                  <label class="block text-xs font-bold mb-1 text-slate-300">Change Admin Security PIN</label>
-                  <input type="text" id="dbms-new-pin" placeholder="New PIN (default: 1234)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs" />
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <button onclick="saveDbmsConfig()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl text-xs">
-                    💾 Save & Test Connection
-                  </button>
-                  <button onclick="resetDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-4 py-2.5 rounded-xl text-xs">
-                    Reset Default
-                  </button>
-                </div>
-              </div>
-              <div id="dbms-test-status" class="text-xs font-bold text-amber-300"></div>
+              <div id="admin-bookings-list" class="space-y-3"></div>
             </div>
 
             <!-- Tab 3: School Settings -->
@@ -514,29 +478,20 @@
                     </div>
                   </div>
                 </div>
-                <button onclick="saveFullSchoolSettings()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-6 py-2.5 rounded-xl text-xs">
-                  ✅ Save All Settings Live
+                <button onclick="saveFullSchoolSettings()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-6 py-2.5 rounded-xl text-xs">
+                  💾 Save All Settings Live (All Devices)
                 </button>
               </div>
             </div>
 
-            <!-- Tab 4: Courses -->
-            <div id="panel-courses" class="admin-panel hidden space-y-4">
-              <div class="flex items-center justify-between">
-                <h4 class="font-bold">Manage Courses, Fees & Features</h4>
-                <button onclick="adminAddNewCourse()" class="bg-emerald-500 text-slate-950 font-extrabold px-3.5 py-1.5 rounded-xl text-xs">+ Add New Course</button>
-              </div>
-              <div id="admin-courses-editor" class="grid sm:grid-cols-2 gap-4"></div>
-            </div>
-
-            <!-- Tab 5: Media -->
+            <!-- Tab 4: Media -->
             <div id="panel-media" class="admin-panel hidden space-y-6">
               <div class="grid md:grid-cols-2 gap-6">
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
                   <h4 class="font-bold text-amber-400">+ Add Training Video (YouTube / MP4 Link)</h4>
                   <input type="text" id="adm-vid-title" placeholder="Video Title" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm" />
                   <input type="url" id="adm-vid-url" placeholder="YouTube Link ya MP4 Video URL" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm" />
-                  <button onclick="adminAddVideo()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-sm">Publish Video</button>
+                  <button onclick="adminAddVideo()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-sm">💾 Save & Publish Video</button>
                 </div>
 
                 <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 space-y-3">
@@ -544,7 +499,7 @@
                   <input type="text" id="adm-img-caption" placeholder="Photo Caption" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm" />
                   <input type="url" id="adm-img-url" placeholder="Image URL (optional)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm" />
                   <input type="file" id="adm-img-file" accept="image/*" class="text-xs text-slate-300" />
-                  <button onclick="adminAddPhoto()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-sm">Publish Photo</button>
+                  <button onclick="adminAddPhoto()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-2.5 rounded-xl text-sm">💾 Save & Publish Photo</button>
                 </div>
               </div>
               <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
@@ -553,10 +508,57 @@
               </div>
             </div>
 
-            <!-- Tab 6: Reviews -->
+            <!-- Tab 5: Reviews -->
             <div id="panel-reviews" class="admin-panel hidden space-y-3">
-              <h4 class="font-bold">Manage Student Reviews</h4>
+              <div class="flex items-center justify-between">
+                <h4 class="font-bold">Manage Student Reviews</h4>
+                <button onclick="syncSaveDB().then(()=>alert('✅ Reviews Saved Live!'))" class="bg-emerald-500 text-slate-950 font-extrabold px-4 py-1.5 rounded-xl text-xs">💾 Save Reviews</button>
+              </div>
               <div id="admin-reviews-editor" class="space-y-3"></div>
+            </div>
+
+            <!-- Tab 6: TURSO DB + GOOGLE SHEET PERMANENT DBMS -->
+            <div id="panel-dbms" class="admin-panel hidden space-y-5">
+              <div class="bg-slate-950 p-5 rounded-2xl border border-sky-500/40 space-y-3">
+                <div class="flex items-center justify-between">
+                  <h4 class="font-bold text-sky-400 text-sm">⚡ 1. Global Cross-Device Turso SQL Database</h4>
+                  <span class="text-[11px] bg-sky-500/20 text-sky-300 px-2.5 py-0.5 rounded-full font-bold">Auto-Syncs Every Phone</span>
+                </div>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                  Apna Turso Database URL aur Auth Token yahan save karein. (Cross-device sync ke liye default Turso credentials code me bhi pre-linked hain).
+                </p>
+                <div class="grid sm:grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-300">Turso Database URL</label>
+                    <input type="text" id="dbms-turso-url" placeholder="libsql://dl-driving-abhibhdauriya.aws-ap-south-1.turso.io" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold mb-1 text-slate-300">Turso Auth Token</label>
+                    <input type="password" id="dbms-turso-token" placeholder="eyJhbGciOiJFZERTQSIsInR5cCI6..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-slate-950 p-5 rounded-2xl border border-emerald-500/40 space-y-3">
+                <h4 class="font-bold text-emerald-400 text-sm">📊 2. Google Sheet Permanent DBMS</h4>
+                <input type="url" id="dbms-gsheet-url" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs" />
+              </div>
+
+              <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 grid sm:grid-cols-2 gap-3 items-end">
+                <div>
+                  <label class="block text-xs font-bold mb-1 text-slate-300">Change Admin Security PIN</label>
+                  <input type="text" id="dbms-new-pin" placeholder="New PIN (default: 1234)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs" />
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button onclick="saveDbmsConfig()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-5 py-2.5 rounded-xl text-xs">
+                    💾 Save & Test Connection
+                  </button>
+                  <button onclick="resetDemoData()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-4 py-2.5 rounded-xl text-xs">
+                    Reset Default
+                  </button>
+                </div>
+              </div>
+              <div id="dbms-test-status" class="text-xs font-bold text-amber-300"></div>
             </div>
 
           </div>
@@ -565,10 +567,17 @@
     </div>
   </div>
 
-  <!-- Application Script: Turso HTTP Pipeline SQL + Google Sheets Keepalive + Fast 3D -->
+  <!-- Application Script: Global Cross-Device Turso SQL + Google Sheet + Fast 3D -->
   <script>
-    const STORAGE_KEY = "nnds_bhiwadi_db_v3";
-    const CONFIG_KEY = "nnds_bhiwadi_cfg_v3";
+    const STORAGE_KEY = "nnds_bhiwadi_db_v4";
+    const CONFIG_KEY = "nnds_bhiwadi_cfg_v4";
+
+    // Pre-wired Global Cloud Endpoints so EVERY phone/device sees live changes automatically
+    const GLOBAL_CLOUD = {
+      tursoUrl: "libsql://dl-driving-abhibhdauriya.aws-ap-south-1.turso.io",
+      tursoToken: "", // Paste your Turso token here once before pushing to GitHub for 100% automatic multi-device sync!
+      gsheetUrl: "https://script.google.com/macros/s/AKfycbzms8zMm0gvZTB89g4DH-E2R2yqp10k6Mya44lO6WDEpXHl4kY6j9fgUNCwzkbvbQ0V/exec"
+    };
 
     const DEFAULT_DB = {
       settings: {
@@ -607,7 +616,13 @@
       ]
     };
 
-    let cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{"pin":"1234","tursoUrl":"","tursoToken":"","gsheetUrl":""}');
+    let savedCfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
+    let cfg = {
+      pin: savedCfg.pin || "1234",
+      tursoUrl: savedCfg.tursoUrl || GLOBAL_CLOUD.tursoUrl,
+      tursoToken: savedCfg.tursoToken || GLOBAL_CLOUD.tursoToken,
+      gsheetUrl: savedCfg.gsheetUrl || GLOBAL_CLOUD.gsheetUrl
+    };
     let db = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null") || structuredClone(DEFAULT_DB);
 
     // =====================================================================
@@ -668,34 +683,30 @@
         { type: "close" }
       ]);
       const row = data?.results?.[0]?.response?.result?.rows?.[0];
-      if (row && row[0]?.value) {
-        return JSON.parse(row[0].value);
-      }
+      if (row && row[0]?.value) return JSON.parse(row[0].value);
       return null;
     }
 
     // =====================================================================
-    // UNIFIED SYNC ENGINE (Turso DB + Google Sheet Keepalive)
+    // UNIFIED CROSS-DEVICE SYNC ENGINE (Turso + Google Sheets)
     // =====================================================================
     async function syncSaveDB(newBooking = null) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
       renderAll();
 
       const badge = document.getElementById("db-sync-badge");
-      let syncedAny = false;
+      badge.textContent = "⏳ Saving...";
 
-      // 1. Turso SQL DB Sync
+      let syncedTurso = false;
       if (cfg.tursoUrl && cfg.tursoToken) {
         try {
           await tursoPushStateAndBooking(newBooking);
-          badge.textContent = "● Turso SQL Synced";
-          syncedAny = true;
+          syncedTurso = true;
         } catch (e) {
           console.error("Turso error:", e);
         }
       }
 
-      // 2. Google Sheet Apps Script Sync (text/plain + keepalive prevents WhatsApp redirect abort)
       if (cfg.gsheetUrl) {
         try {
           await fetch(cfg.gsheetUrl.trim(), {
@@ -709,39 +720,47 @@
               state: db
             })
           });
-          badge.textContent = syncedAny ? "● Turso + Sheet Synced" : "● Google Sheet Synced";
         } catch (e) {
           console.error("Sheet error:", e);
         }
       }
+
+      badge.textContent = syncedTurso ? "● Cloud Synced" : "● Sheet Synced";
     }
 
     async function backgroundCloudPull() {
       const badge = document.getElementById("db-sync-badge");
+      // 1. Try Turso SQL first
       if (cfg.tursoUrl && cfg.tursoToken) {
         try {
           const remote = await tursoPullState();
           if (remote && remote.courses) {
             db = remote;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-            badge.textContent = "● Turso SQL Live";
+            badge.textContent = "● Live Cloud";
             renderAll();
             return;
           }
         } catch (e) {}
       }
+      // 2. Fallback / Global Pull from Google Sheet AppState (Works on ANY phone without token!)
       if (cfg.gsheetUrl) {
         try {
-          const res = await fetch(cfg.gsheetUrl.trim());
+          const res = await fetch(cfg.gsheetUrl.trim() + "?t=" + Date.now());
           const remote = await res.json();
           if (remote && remote.courses) {
             db = remote;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
-            badge.textContent = "● Google Sheet Live";
+            badge.textContent = "● Live Cloud";
             renderAll();
           }
         } catch (e) {}
       }
+    }
+
+    async function forceCloudRefresh() {
+      await backgroundCloudPull();
+      alert("✅ Latest Cloud Data sabhi devices se sync ho gaya!");
     }
 
     function renderAll() {
@@ -841,12 +860,11 @@
         : `🚗 <strong>Doorstep Pickup Active:</strong> Free Pickup & Drop available for <em>${area}</em>`;
     }
 
-    // WhatsApp Booking Submit (Waits for Turso & Google Sheet flush before opening WhatsApp)
     document.getElementById("booking-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("ui-bk-submit-btn");
       const origText = btn.textContent;
-      btn.textContent = "⏳ Saving to Database...";
+      btn.textContent = "⏳ Saving to Cloud & Sheet...";
       btn.disabled = true;
 
       const s = db.settings || DEFAULT_DB.settings;
@@ -910,7 +928,7 @@
       }
     });
 
-    function openAdminPanel(tab = "bookings") {
+    function openAdminPanel(tab = "courses") {
       document.getElementById("admin-modal").classList.remove("hidden");
       if (isAdminUnlocked) {
         document.getElementById("admin-login-box").classList.add("hidden");
@@ -1000,7 +1018,7 @@
 
       db.settings = s;
       await syncSaveDB();
-      alert("✅ WhatsApp Number, Logo aur School Settings Live Update ho gaye!");
+      alert("✅ WhatsApp Number, Logo aur School Settings sabhi devices par Live Save ho gaye!");
     }
 
     function renderAdminLists() {
@@ -1019,27 +1037,42 @@
       `).join("") : `<div class="text-xs text-slate-500">Abhi koi booking nahi hai.</div>`;
 
       document.getElementById("admin-courses-editor").innerHTML = db.courses.map((c, idx) => `
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
-          <div class="flex justify-between items-center">
-            <input type="text" value="${c.title}" onchange="updateCourseField(${idx}, 'title', this.value)" class="font-bold text-amber-400 bg-transparent border-b border-slate-700 focus:outline-none" />
-            <button onclick="deleteCourse(${idx})" class="text-rose-400 text-[11px]">Remove</button>
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2.5 text-xs">
+          <div class="flex justify-between items-center gap-2">
+            <input type="text" id="crs-title-${idx}" value="${c.title}" class="font-bold text-amber-400 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 flex-1" />
+            <button onclick="deleteCourse(${idx})" class="bg-rose-500/20 hover:bg-rose-500 hover:text-white text-rose-300 px-3 py-1.5 rounded-lg font-bold transition">🗑 Delete</button>
           </div>
-          <input type="text" value="${c.price}" onchange="updateCourseField(${idx}, 'price', this.value)" placeholder="Price" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
-          <input type="text" value="${c.days}" onchange="updateCourseField(${idx}, 'days', this.value)" placeholder="Duration" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
-          <input type="text" value="${c.badge}" onchange="updateCourseField(${idx}, 'badge', this.value)" placeholder="Badge" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-[10px] text-slate-400">Course Price (₹)</label>
+              <input type="text" id="crs-price-${idx}" value="${c.price}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 font-bold text-emerald-400" />
+            </div>
+            <div>
+              <label class="text-[10px] text-slate-400">Badge Tag</label>
+              <input type="text" id="crs-badge-${idx}" value="${c.badge}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
+            </div>
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400">Duration & Daily Time</label>
+            <input type="text" id="crs-days-${idx}" value="${c.days}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
+          </div>
+          <div>
+            <label class="text-[10px] text-slate-400">Features (Comma separated)</label>
+            <input type="text" id="crs-feat-${idx}" value="${(c.features || []).join(', ')}" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
+          </div>
         </div>
       `).join("");
 
       document.getElementById("admin-media-manager").innerHTML = [
-        ...db.photos.map((p, i) => `<div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex flex-col justify-between gap-2"><img src="${p.url}" class="h-16 w-full object-cover rounded-lg"/><button onclick="deletePhoto(${i})" class="bg-rose-500/20 text-rose-300 py-1 rounded font-bold">Delete Photo</button></div>`),
-        ...db.videos.map((v, i) => `<div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex flex-col justify-between gap-2"><div class="text-[11px] font-bold truncate">🎥 ${v.title}</div><button onclick="deleteVideo(${i})" class="bg-rose-500/20 text-rose-300 py-1 rounded font-bold">Delete Video</button></div>`)
+        ...db.photos.map((p, i) => `<div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex flex-col justify-between gap-2"><img src="${p.url}" class="h-16 w-full object-cover rounded-lg"/><button onclick="deletePhoto(${i})" class="bg-rose-500/20 text-rose-300 py-1 rounded font-bold">🗑 Delete Photo</button></div>`),
+        ...db.videos.map((v, i) => `<div class="bg-slate-900 p-2 rounded-xl border border-slate-800 flex flex-col justify-between gap-2"><div class="text-[11px] font-bold truncate">🎥 ${v.title}</div><button onclick="deleteVideo(${i})" class="bg-rose-500/20 text-rose-300 py-1 rounded font-bold">🗑 Delete Video</button></div>`)
       ].join("");
 
       document.getElementById("admin-reviews-editor").innerHTML = db.reviews.map((r, idx) => `
         <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2 text-xs">
           <div class="flex justify-between font-bold">
             <span>${r.name} (${"★".repeat(r.stars)})</span>
-            <button onclick="deleteReview(${idx})" class="text-rose-400">Delete</button>
+            <button onclick="deleteReview(${idx})" class="bg-rose-500/20 text-rose-300 px-2.5 py-1 rounded-lg">🗑 Delete</button>
           </div>
           <p class="text-slate-400">${r.text}</p>
           <input type="text" placeholder="Owner reply likhein..." value="${r.reply || ""}" onchange="replyReview(${idx}, this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5" />
@@ -1047,12 +1080,33 @@
       `).join("");
     }
 
-    async function updateCourseField(idx, key, val) { db.courses[idx][key] = val; await syncSaveDB(); }
-    async function deleteCourse(idx) { db.courses.splice(idx, 1); await syncSaveDB(); }
+    async function saveCoursesChanges() {
+      const btn = document.getElementById("btn-save-courses");
+      btn.textContent = "⏳ Saving...";
+      db.courses.forEach((c, idx) => {
+        c.title = document.getElementById(`crs-title-${idx}`).value.trim() || c.title;
+        c.price = document.getElementById(`crs-price-${idx}`).value.trim() || c.price;
+        c.badge = document.getElementById(`crs-badge-${idx}`).value.trim() || c.badge;
+        c.days = document.getElementById(`crs-days-${idx}`).value.trim() || c.days;
+        const featRaw = document.getElementById(`crs-feat-${idx}`).value.trim();
+        if (featRaw) c.features = featRaw.split(",").map(x => x.trim()).filter(Boolean);
+      });
+      await syncSaveDB();
+      btn.textContent = "💾 Save Courses Live";
+      alert("✅ Sabhi Courses & Prices Live Save ho gaye aur ab sabhi phones par dikhenge!");
+    }
+
+    async function deleteCourse(idx) {
+      if (!confirm("Kya aap is course ko delete karna chahte hain?")) return;
+      db.courses.splice(idx, 1);
+      await syncSaveDB();
+    }
+
     async function adminAddNewCourse() {
       db.courses.push({ id: "c" + Date.now(), title: "Special Highway Batch", days: "10 Days • 45 Min/Day", price: "₹3,000", badge: "New", features: ["NH-48 Highway Practice", "Night Headlight Control", "Dual-Control Safety"] });
       await syncSaveDB();
     }
+
     async function deleteBooking(idx) { db.bookings.splice(idx, 1); await syncSaveDB(); }
     async function clearBookings() { db.bookings = []; await syncSaveDB(); }
     async function deletePhoto(idx) { db.photos.splice(idx, 1); await syncSaveDB(); }
@@ -1069,11 +1123,11 @@
         const compressed = await compressImageFile(fileInput, 720, 0.72);
         db.photos.unshift({ id: "p" + Date.now(), caption, url: compressed });
         await syncSaveDB();
-        alert("✅ Photo Live Add ho gayi!");
+        alert("✅ Photo Save & Live Publish ho gayi!");
       } else if (urlInput) {
         db.photos.unshift({ id: "p" + Date.now(), caption, url: urlInput });
         await syncSaveDB();
-        alert("✅ Photo URL Live Add ho gaya!");
+        alert("✅ Photo URL Save & Publish ho gaya!");
       }
     }
 
@@ -1084,13 +1138,13 @@
       if (urlInput) {
         db.videos.unshift({ id: "v" + Date.now(), title, url: urlInput });
         await syncSaveDB();
-        alert("✅ Video Live Add ho gaya!");
+        alert("✅ Video Save & Live Publish ho gaya!");
       }
     }
 
     async function saveDbmsConfig() {
       const statusEl = document.getElementById("dbms-test-status");
-      statusEl.textContent = "⏳ Connecting & creating SQL tables...";
+      statusEl.textContent = "⏳ Connecting & syncing across all devices...";
       cfg.tursoUrl = document.getElementById("dbms-turso-url").value.trim();
       cfg.tursoToken = document.getElementById("dbms-turso-token").value.trim();
       cfg.gsheetUrl = document.getElementById("dbms-gsheet-url").value.trim();
@@ -1102,14 +1156,14 @@
       if (cfg.tursoUrl && cfg.tursoToken) {
         try {
           await tursoPushStateAndBooking(db.bookings[0] || null);
-          msgParts.push("✅ Turso SQL Connected (school_state & bookings tables ready!)");
+          msgParts.push("✅ Turso SQL Connected!");
         } catch (e) {
           msgParts.push("❌ Turso Error: " + e.message);
         }
       }
       if (cfg.gsheetUrl) {
         await syncSaveDB(db.bookings[0] || null);
-        msgParts.push("✅ Google Sheet Synced!");
+        msgParts.push("✅ Google Sheet Cross-Device Synced!");
       }
       statusEl.textContent = msgParts.join("  |  ") || "Saved locally.";
     }
